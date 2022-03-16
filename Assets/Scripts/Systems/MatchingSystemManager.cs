@@ -9,6 +9,7 @@ using Photon.Realtime;
 /// </summary>
 public class MatchingSystemManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] byte _maxPlayers = 2;
     /// <summary>
     /// マッチング開始時に呼ぶの関数
     /// </summary>
@@ -21,8 +22,19 @@ public class MatchingSystemManager : MonoBehaviourPunCallbacks
     /// </summary>
     public override void OnConnectedToMaster()
     {
-        //Roomサーバーに参加（存在しないときは生成）
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
+        //ランダムなルームに参加
+        PhotonNetwork.JoinRandomRoom();
+    }
+    /// <summary>
+    /// ランダムで参加できるルームが存在しないなら、新規でルームを作成する
+    /// </summary>
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        // ルームの参加人数を2人に設定する
+        var roomOptions = new RoomOptions();
+        roomOptions.MaxPlayers = _maxPlayers;
+
+        PhotonNetwork.CreateRoom(null, roomOptions);
     }
     /// <summary>
     /// インゲームのサーバーに接続したときに呼ばれるコールバック
@@ -30,5 +42,11 @@ public class MatchingSystemManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //プレイヤーのアバターを生成する
+
+        // ルームが満員になったら、以降そのルームへの参加を不許可にする
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
     }
 }
