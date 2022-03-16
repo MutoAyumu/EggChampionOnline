@@ -5,41 +5,46 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 
-/// <summary>
-/// プレイヤー同士をマッチングさせる為のクラス
-/// </summary>
-public class MatchingSystemManager : MonoBehaviourPunCallbacks
+public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] byte _maxPlayers = 2;
+    [SerializeField] byte _maxPlayers;
 
-    /// <summary>
-    /// マッチング開始時に呼ぶの関数
-    /// </summary>
-    public void OnQuickMatching()
+    [SerializeField] InputField _nameInputField = default;
+    protected override void OnAwake()
     {
         PhotonNetwork.ConnectUsingSettings();
     }
     /// <summary>
-    /// マスターサーバーに接続されたときに呼ばれるコールバック
+    /// UIを非表示にする為の関数
     /// </summary>
-    public override void OnConnectedToMaster()
+    void OnClosedUI()
     {
-        //ランダムなルームに参加
+
+    }
+    /// <summary>
+    /// クイックマッチ時に呼ぶ
+    /// </summary>
+    void OnQuickMatch()
+    {
+        //ランダムなルームに接続
         PhotonNetwork.JoinRandomRoom();
     }
     /// <summary>
-    /// ランダムで参加できるルームが存在しないなら、新規でルームを作成する
+    /// ランダムなルームに接続できなかった時に呼ばれるコールバック
     /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         // ルームの参加人数を2人に設定する
         var roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = _maxPlayers;
 
+        //新しいルームの作成
         PhotonNetwork.CreateRoom(null, roomOptions);
     }
     /// <summary>
-    /// インゲームのサーバーに接続したときに呼ばれるコールバック
+    /// ルームに接続（作成）できたときに呼ばれるコールバック
     /// </summary>
     public override void OnJoinedRoom()
     {
@@ -49,6 +54,17 @@ public class MatchingSystemManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
+        }
+    }
+    /// <summary>
+    /// 名前登録時のボタンで使う
+    /// </summary>
+    public void SetName()
+    {
+        if (!string.IsNullOrEmpty(_nameInputField.text))
+        {
+            //プレイヤーの名前を登録
+            PhotonNetwork.NickName = _nameInputField.text;
         }
     }
 }
