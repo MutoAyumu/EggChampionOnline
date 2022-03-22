@@ -5,10 +5,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] byte _maxPlayers;
+    [SerializeField] string _nextSceneName = " ";
 
     [SerializeField] TMP_InputField _nameInputField = default;
     [SerializeField] TMP_Text _nameText = default;
@@ -45,6 +47,14 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("接続しました");
         }
     }
+    public void OnDisconnect()
+    {
+        if(PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+            Debug.Log("切断しました");
+        }
+    }
     /// <summary>
     /// UIを非表示にする為の関数
     /// </summary>
@@ -56,10 +66,11 @@ public class GameManager : Singleton<GameManager>
     /// <summary>
     /// クイックマッチ時に呼ぶ
     /// </summary>
-    void OnQuickMatch()
+    public void OnQuickMatch()
     {
         //ランダムなルームに接続
         PhotonNetwork.JoinRandomRoom();
+        Debug.Log("マッチングしています");
     }
     /// <summary>
     /// ランダムなルームに接続できなかった時に呼ばれるコールバック
@@ -83,6 +94,8 @@ public class GameManager : Singleton<GameManager>
     public override void OnJoinedRoom()
     {
         Debug.Log("ルームに参加しました");
+        PhotonNetwork.IsMessageQueueRunning = false;
+        SceneLoad(_nextSceneName);
 
         // ルームが満員になったら、以降そのルームへの参加を不許可にする
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -112,5 +125,10 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("NamePanelに戻りました");
         OnClosedUI();
         _namePanel.SetActive(true);
+    }
+    
+    public void SceneLoad(string name)
+    {
+        SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
     }
 }
