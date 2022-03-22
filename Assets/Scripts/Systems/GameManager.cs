@@ -19,6 +19,8 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnAwake()
     {
+        Screen.SetResolution(960, 540, false, 60);
+
         OnClosedUI();
         _namePanel.SetActive(true);
     }

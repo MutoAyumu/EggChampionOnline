@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7922500946456220386}
   - component: {fileID: 6658236121537147788}
   m_Layer: 0
-  m_Name: PlayerAvatar
+  m_Name: Avatar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
+  m_SynchronizeScale: 1
   m_UseLocal: 1
 --- !u!114 &1564413030558230642
 MonoBehaviour:
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rb: {fileID: 7922500946456220386}
-  _moveSpeed: 2
+  _moveSpeed: 5
 --- !u!54 &7922500946456220386
 Rigidbody:
   m_ObjectHideFlags: 0
