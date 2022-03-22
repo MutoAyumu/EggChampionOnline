@@ -4,22 +4,54 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField] byte _maxPlayers;
 
-    [SerializeField] InputField _nameInputField = default;
+    [SerializeField] TMP_InputField _nameInputField = default;
+    [SerializeField] TMP_Text _nameText = default;
+    [SerializeField] GameObject _namePanel = default;
+    [SerializeField] GameObject _selectLinePanel = default;
+
+    static string playerNameKey = "noname";
+
     protected override void OnAwake()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        OnClosedUI();
+        _namePanel.SetActive(true);
+    }
+
+    private void Start()
+    {
+        if(!string.IsNullOrEmpty(_nameInputField.text))
+        {
+            if(PlayerPrefs.HasKey(playerNameKey))
+            {
+                _nameInputField.text = PlayerPrefs.GetString(playerNameKey);
+                _nameText.text = PlayerPrefs.GetString(playerNameKey);
+            }
+        }
+    }
+    /// <summary>
+    ///  ネットワークに接続する
+    /// </summary>
+    public void OnConnect()
+    {
+        if(!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            Debug.Log("接続しました");
+        }
     }
     /// <summary>
     /// UIを非表示にする為の関数
     /// </summary>
     void OnClosedUI()
     {
-
+        _namePanel.SetActive(false);
+        _selectLinePanel.SetActive(false);
     }
     /// <summary>
     /// クイックマッチ時に呼ぶ
@@ -36,6 +68,8 @@ public class GameManager : Singleton<GameManager>
     /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log("ルームに参加できませんでした。ルームを作成します");
+
         // ルームの参加人数を2人に設定する
         var roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = _maxPlayers;
@@ -48,7 +82,7 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     public override void OnJoinedRoom()
     {
-        //プレイヤーのアバターを生成する
+        Debug.Log("ルームに参加しました");
 
         // ルームが満員になったら、以降そのルームへの参加を不許可にする
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
@@ -65,6 +99,18 @@ public class GameManager : Singleton<GameManager>
         {
             //プレイヤーの名前を登録
             PhotonNetwork.NickName = _nameInputField.text;
+            PlayerPrefs.SetString(playerNameKey, _nameInputField.text);
+            _nameText.text = PlayerPrefs.GetString(playerNameKey);
+            Debug.Log(PhotonNetwork.NickName);
+
+            OnClosedUI();
+            _selectLinePanel.SetActive(true);
         }
+    }
+    public void BackNamePanel()
+    {
+        Debug.Log("NamePanelに戻りました");
+        OnClosedUI();
+        _namePanel.SetActive(true);
     }
 }
