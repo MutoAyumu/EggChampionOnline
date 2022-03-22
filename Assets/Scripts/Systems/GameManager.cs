@@ -9,8 +9,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    [SerializeField] byte _maxPlayers;
-    [SerializeField] string _nextSceneName = " ";
 
     [SerializeField] TMP_InputField _nameInputField = default;
     [SerializeField] TMP_Text _nameText = default;
@@ -47,14 +45,6 @@ public class GameManager : Singleton<GameManager>
             Debug.Log("接続しました");
         }
     }
-    public void OnDisconnect()
-    {
-        if(PhotonNetwork.IsConnected)
-        {
-            PhotonNetwork.Disconnect();
-            Debug.Log("切断しました");
-        }
-    }
     /// <summary>
     /// UIを非表示にする為の関数
     /// </summary>
@@ -62,46 +52,6 @@ public class GameManager : Singleton<GameManager>
     {
         _namePanel.SetActive(false);
         _selectLinePanel.SetActive(false);
-    }
-    /// <summary>
-    /// クイックマッチ時に呼ぶ
-    /// </summary>
-    public void OnQuickMatch()
-    {
-        //ランダムなルームに接続
-        PhotonNetwork.JoinRandomRoom();
-        Debug.Log("マッチングしています");
-    }
-    /// <summary>
-    /// ランダムなルームに接続できなかった時に呼ばれるコールバック
-    /// </summary>
-    /// <param name="returnCode"></param>
-    /// <param name="message"></param>
-    public override void OnJoinRandomFailed(short returnCode, string message)
-    {
-        Debug.Log("ルームに参加できませんでした。ルームを作成します");
-
-        // ルームの参加人数を2人に設定する
-        var roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = _maxPlayers;
-
-        //新しいルームの作成
-        PhotonNetwork.CreateRoom(null, roomOptions);
-    }
-    /// <summary>
-    /// ルームに接続（作成）できたときに呼ばれるコールバック
-    /// </summary>
-    public override void OnJoinedRoom()
-    {
-        Debug.Log("ルームに参加しました");
-        PhotonNetwork.IsMessageQueueRunning = false;
-        SceneLoad(_nextSceneName);
-
-        // ルームが満員になったら、以降そのルームへの参加を不許可にする
-        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-        }
     }
     /// <summary>
     /// 名前登録時のボタンで使う
@@ -125,10 +75,5 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("NamePanelに戻りました");
         OnClosedUI();
         _namePanel.SetActive(true);
-    }
-    
-    public void SceneLoad(string name)
-    {
-        SceneManager.LoadSceneAsync(name, LoadSceneMode.Single);
     }
 }
