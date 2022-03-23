@@ -10,40 +10,57 @@ using UnityEngine.UI;
 /// </summary>
 public class MatchingSystemManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField] byte _maxPlayers = 2;
+    [SerializeField] byte _maxPlayers;
+    [SerializeField] SceneLoad _sceneLoad = default;
+    [SerializeField] string _nextSceneName = "InGameScene";
 
     /// <summary>
-    /// マッチング開始時に呼ぶの関数
+    /// ネットワークから切断する
     /// </summary>
-    public void OnQuickMatching()
+    public void OnDisconnect()
     {
-        PhotonNetwork.ConnectUsingSettings();
+        if (PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.Disconnect();
+            Debug.Log("切断しました");
+        }
     }
+
     /// <summary>
-    /// マスターサーバーに接続されたときに呼ばれるコールバック
+    /// クイックマッチ時に呼ぶ
     /// </summary>
-    public override void OnConnectedToMaster()
+    public void OnQuickMatch()
     {
-        //ランダムなルームに参加
+        //ランダムなルームに接続
         PhotonNetwork.JoinRandomRoom();
+        Debug.Log("マッチングしています");
     }
+
     /// <summary>
-    /// ランダムで参加できるルームが存在しないなら、新規でルームを作成する
+    /// ランダムなルームに接続できなかった時に呼ばれるコールバック
     /// </summary>
+    /// <param name="returnCode"></param>
+    /// <param name="message"></param>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
+        Debug.Log("ルームに参加できませんでした。ルームを作成します");
+
         // ルームの参加人数を2人に設定する
         var roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = _maxPlayers;
 
+        //新しいルームの作成
         PhotonNetwork.CreateRoom(null, roomOptions);
     }
+
     /// <summary>
-    /// インゲームのサーバーに接続したときに呼ばれるコールバック
+    /// ルームに接続（作成）できたときに呼ばれるコールバック
     /// </summary>
     public override void OnJoinedRoom()
     {
-        //プレイヤーのアバターを生成する
+        Debug.Log("ルームに参加しました");
+        PhotonNetwork.IsMessageQueueRunning = false;
+        _sceneLoad.LoadScene(_nextSceneName);
 
         // ルームが満員になったら、以降そのルームへの参加を不許可にする
         if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
