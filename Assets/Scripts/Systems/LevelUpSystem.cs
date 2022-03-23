@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class LevelUpSystem : Singleton<LevelUpSystem>
@@ -8,6 +9,19 @@ public class LevelUpSystem : Singleton<LevelUpSystem>
     [SerializeField] TextAsset _csv = default;
     [SerializeField, Tooltip("Xが行　Yが列")] Vector2Int _matrix = default;
     int[,] _levelTable = default;
+
+    [SerializeField] TMP_Text _levelUpMoneyText = default;
+
+    [SerializeField] TMP_Text _levelText = default;
+    static int _currentLevel = 0;
+
+    [SerializeField] TMP_Text _hpText = default;
+    [SerializeField] TMP_Text _powerText = default;
+    [SerializeField] TMP_Text _speedText = default;
+
+    /*ToDo
+     レベルの情報をJsonとかで保存するようにしたい
+     */
 
     protected override void OnAwake()
     {
@@ -30,5 +44,29 @@ public class LevelUpSystem : Singleton<LevelUpSystem>
                 }
             }
         }
+    }
+    private void Start()
+    {
+        OnUiUpdate();
+    }
+    public void OnLevelUp()
+    {
+        //読み込んだCSVの１列レベル行の値が今の所持金よりも多ければ
+        if(GameManager.Instance.Money >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
+        {
+            GameManager.Instance.Money -= _levelTable[_currentLevel, 0];
+            GameManager.Instance.MoneyUpdate();
+            _currentLevel++;
+            OnUiUpdate();
+        }
+    }
+    void OnUiUpdate()
+    {
+        var level = _currentLevel + 1;
+        _levelText.text = level.ToString();
+        _levelUpMoneyText.text = _levelTable[_currentLevel, 0].ToString();
+        _hpText.text = _levelTable[_currentLevel, 1].ToString();
+        _powerText.text = _levelTable[_currentLevel, 2].ToString();
+        _speedText.text = _levelTable[_currentLevel, 3].ToString();
     }
 }
