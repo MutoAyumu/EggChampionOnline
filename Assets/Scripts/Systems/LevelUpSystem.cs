@@ -4,7 +4,7 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 
-public class LevelUpSystem : Singleton<LevelUpSystem>
+public class LevelUpSystem : MonoBehaviour
 {
     [SerializeField] TextAsset _csv = default;
     [SerializeField, Tooltip("Xが行　Yが列")] Vector2Int _matrix = default;
@@ -23,7 +23,7 @@ public class LevelUpSystem : Singleton<LevelUpSystem>
      レベルの情報をJsonとかで保存するようにしたい
      */
 
-    protected override void OnAwake()
+    void Awake()
     {
         //テーブルデータの入れ物を作る
         _levelTable = new int[_matrix.x, _matrix.y];
