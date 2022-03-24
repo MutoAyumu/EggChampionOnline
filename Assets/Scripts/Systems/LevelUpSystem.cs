@@ -53,12 +53,14 @@ public class LevelUpSystem : MonoBehaviour
                 }
             }
         }
+
+        _currentLevel = LevelUpManager.Levels[_eggNum];
     }
     private void Start()
     {
         if (LevelUpManager.Buy[_eggNum])
         {
-            _currentLevel = LevelUpManager.Levels[_eggNum];
+            //_currentLevel = LevelUpManager.Levels[_eggNum];
             _buyButton.gameObject.SetActive(false);
             _selectPanel.SetActive(true);
         }

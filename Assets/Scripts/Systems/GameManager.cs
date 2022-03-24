@@ -13,7 +13,6 @@ public class GameManager : Singleton<GameManager>
 
     protected override void OnAwake()
     {
-        //DontDestroyOnLoad(this.gameObject);
         MoneyUpdate();
     }
     public void MoneyUpdate()
