@@ -8,8 +8,8 @@ using UnityEngine;
 /// </summary>
 public class CameraChange : MonoBehaviour
 {
-    [SerializeField] Transform[] _eggs = default;
-    Transform _currentEgg = default;
+    [SerializeField] LevelUpSystem[] _eggs = default;
+    LevelUpSystem _currentEgg = default;
     int _eggNumber = 0;
     [SerializeField] CinemachineVirtualCamera _vcam = default;
 
@@ -22,18 +22,28 @@ public class CameraChange : MonoBehaviour
     {
         if (_currentEgg != _eggs[_eggs.Length - 1])
         {
+            //ˆê‚Â‘O‚ÌCanvas‚ğÁ‚·
+            _eggs[_eggNumber].OnCanvasActive();
+
             _eggNumber++;
-            _vcam.Follow = _eggs[_eggNumber];
+            _vcam.Follow = _eggs[_eggNumber].transform;
             _currentEgg = _eggs[_eggNumber];
+
+            _eggs[_eggNumber].OnCanvasActive();
         }
     }    
     public void LeftChange()
     {
         if(_currentEgg != _eggs[0])
         {
+            //ˆê‚Â‘O‚ÌCanvas‚ğÁ‚·
+            _eggs[_eggNumber].OnCanvasActive();
+
             _eggNumber--;
-            _vcam.Follow = _eggs[_eggNumber];
+            _vcam.Follow = _eggs[_eggNumber].transform;
             _currentEgg = _eggs[_eggNumber];
+
+            _eggs[_eggNumber].OnCanvasActive();
         }
     }
 }

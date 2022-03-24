@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using DG.Tweening;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -17,6 +18,11 @@ public class GameManager : Singleton<GameManager>
     }
     public void MoneyUpdate()
     {
+        _moneyText.text = "‚¨‹à:" + _money.ToString("D7");
+    }
+    public void MoneyUpdate(int money)
+    {
+        _money -= money;
         _moneyText.text = "‚¨‹à:" + _money.ToString("D7");
     }
 }
