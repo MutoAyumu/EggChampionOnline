@@ -12,6 +12,7 @@ public class LevelUpSystem : MonoBehaviour
     int[,] _levelTable = default;
 
     [SerializeField] int _eggNum = 0;
+
     int _currentLevel = 1;
 
     [SerializeField] int _maxLevel = 5;

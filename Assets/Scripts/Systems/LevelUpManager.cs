@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LevelUpManager : Singleton<LevelUpManager>
 {
-    static bool[] _purchaseHistory = new bool[3];
-    static int[] _levelHistory = new int[3];
+    static bool[] _purchaseHistory = new bool[6];
+    static int[] _levelHistory = new int[6];
 
-    public static bool[] PurchaseHistory { get => _purchaseHistory;}
-    public static int[] LevelHistory { get => _levelHistory;}
+    public static bool[] PurchaseHistory { get => _purchaseHistory; set => _purchaseHistory = value; }
+    public static int[] LevelHistory { get => _levelHistory; set => _levelHistory = value; }
 
     /// <summary>
     /// w“ü‚µ‚½‚ç”z—ñ‚ğTrue‚É‚·‚é
