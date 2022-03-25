@@ -11,6 +11,7 @@ public class LevelUpSystem : MonoBehaviour
     [SerializeField, Tooltip("X‚ªs@Y‚ª—ñ")] Vector2Int _matrix = default;
     int[,] _levelTable = default;
 
+    [SerializeField] string _avaterName = "Avatar";
     [SerializeField] int _eggNum = 0;
 
     int _currentLevel = 1;
@@ -133,5 +134,10 @@ public class LevelUpSystem : MonoBehaviour
         {
             _canvas.gameObject.SetActive(false);
         }
+    }
+
+    public void SetAvater()
+    {
+        Manager.Instance.Avater = _avaterName;
     }
 }

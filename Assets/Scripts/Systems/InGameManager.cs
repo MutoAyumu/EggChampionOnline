@@ -13,7 +13,7 @@ public class InGameManager : MonoBehaviourPunCallbacks
 
         var t = Random.Range(0, _insPos.Count);
 
-        PhotonNetwork.Instantiate(_playerPrefabName, _insPos[t].position, Quaternion.identity);
+        PhotonNetwork.Instantiate(Manager.Instance.Avater, _insPos[t].position, Quaternion.identity);
         Debug.Log(_insPos[t].name + "Ç…ê∂ê¨ÇµÇ‹ÇµÇΩ");
 
         _insPos.Remove(_insPos[t]);
