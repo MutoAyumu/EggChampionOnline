@@ -12,18 +12,22 @@ public class LevelUpSystem : MonoBehaviour
     int[,] _levelTable = default;
 
     [SerializeField] int _eggNum = 0;
-    int _currentLevel;
+
+    int _currentLevel = 1;
+
+    [SerializeField] int _maxLevel = 5;
 
     [SerializeField] int _price = 200;
     [SerializeField] Button _buyButton = default;
     [SerializeField] GameObject _selectPanel = default;
+    [SerializeField] GameObject _releasePanel = default;
 
     [SerializeField] Canvas _canvas = default;
 
+    [SerializeField] TMP_Text _priceText = default;
+
     [SerializeField] TMP_Text _levelUpMoneyText = default;
-
     [SerializeField] TMP_Text _levelText = default;
-
     [SerializeField] TMP_Text _hpText = default;
     [SerializeField] TMP_Text _powerText = default;
     [SerializeField] TMP_Text _speedText = default;
@@ -53,32 +57,39 @@ public class LevelUpSystem : MonoBehaviour
                 }
             }
         }
-
-        _currentLevel = LevelUpManager.Levels[_eggNum];
     }
     private void Start()
     {
-        if (LevelUpManager.Buy[_eggNum])
+        if (LevelUpManager.PurchaseHistory[_eggNum])
         {
-            //_currentLevel = LevelUpManager.Levels[_eggNum];
             _buyButton.gameObject.SetActive(false);
             _selectPanel.SetActive(true);
+            _releasePanel.SetActive(false);
         }
+        else
+        {
+            _buyButton.gameObject.SetActive(true);
+            _selectPanel.SetActive(false);
+            _releasePanel.SetActive(true);
+            _priceText.text = "" + _price.ToString();
+        }
+
+        _currentLevel = LevelUpManager.LevelHistory[_eggNum];
 
         OnUiUpdate();
     }
     public void OnBuyEgg()
     {
-        if(!LevelUpManager.Buy[_eggNum])
+        if(!LevelUpManager.PurchaseHistory[_eggNum])
         {
             if(GameManager.Instance.Money >= _price)
             {
                 GameManager.Instance.MoneyUpdate(_price);
-                _currentLevel = LevelUpManager.Instance.LevelUp(_eggNum);
 
-                LevelUpManager.Instance.BuyEgg(_eggNum);
+                LevelUpManager.Instance.PurchaseUpdate(_eggNum);
                 _buyButton.gameObject.SetActive(false);
                 _selectPanel.SetActive(true);
+                _releasePanel.SetActive(false);
             }
         }
     }
@@ -87,28 +98,29 @@ public class LevelUpSystem : MonoBehaviour
         //“Ç‚Ýž‚ñ‚¾CSV‚Ì‚P—ñƒŒƒxƒ‹s‚Ì’l‚ª¡‚ÌŠŽ‹à‚æ‚è‚à‘½‚¯‚ê‚Î
         if(GameManager.Instance.Money >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
         {
-            GameManager.Instance.MoneyUpdate(_levelTable[_currentLevel, 0]);
+            GameManager.Instance.MoneyUpdate(_levelTable[_currentLevel, 1]);
 
-            _currentLevel = LevelUpManager.Instance.LevelUp(_eggNum);
+            _currentLevel++;
+            LevelUpManager.Instance.LevelUpdate(_eggNum, _currentLevel);
+
             OnUiUpdate();
         }
     }
     void OnUiUpdate()
     {
-        if (_levelTable[_currentLevel, 0] == 0)
+        if (_levelTable[_currentLevel, 0] == _maxLevel)
         {
             _levelText.text = "Max";
         }
         else
         {
-            var level = _currentLevel + 1;
-            _levelText.text = level.ToString();
+            _levelText.text = _levelTable[_currentLevel, 0].ToString();
         }
 
-        _levelUpMoneyText.text = _levelTable[_currentLevel, 0].ToString();
-        _hpText.text = _levelTable[_currentLevel, 1].ToString();
-        _powerText.text = _levelTable[_currentLevel, 2].ToString();
-        _speedText.text = _levelTable[_currentLevel, 3].ToString();
+        _levelUpMoneyText.text = _levelTable[_currentLevel, 1].ToString();
+        _hpText.text = _levelTable[_currentLevel, 2].ToString();
+        _powerText.text = _levelTable[_currentLevel, 3].ToString();
+        _speedText.text = _levelTable[_currentLevel, 4].ToString();
     }
 
     public void OnCanvasActive()
