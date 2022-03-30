@@ -6,10 +6,10 @@ using UnityEngine;
 /// <summary>
 /// 卵選択時に別の卵をフォローする為のクラス
 /// </summary>
-public class CameraChange : MonoBehaviour
+public class TestCameraChange : MonoBehaviour
 {
-    [SerializeField] LevelUpSystem[] _eggs = default;
-    LevelUpSystem _currentEgg = default;
+    [SerializeField] TestLevelUpSystem[] _eggs = default;
+    TestLevelUpSystem _currentEgg = default;
     int _eggNumber = 0;
     [SerializeField] CinemachineVirtualCamera _vcam = default;
 

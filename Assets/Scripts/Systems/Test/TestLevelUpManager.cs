@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevelUpManager : Singleton<LevelUpManager>
+public class TestLevelUpManager : Singleton<TestLevelUpManager>
 {
     static bool[] _purchaseHistory = new bool[6];
     static int[] _levelHistory = new int[6];
