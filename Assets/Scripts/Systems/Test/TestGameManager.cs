@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 
-public class GameManager : Singleton<GameManager>
+public class TestGameManager : Singleton<TestGameManager>
 {
     [SerializeField] static int _money = 10000;
     [SerializeField]TMP_Text _moneyText = default;

@@ -6,7 +6,7 @@ using Photon.Pun;
 /// <summary>
 /// プレイヤーアバターを操作するクラス
 /// </summary>
-public class PlayerController : MonoBehaviourPunCallbacks
+public class TestPlayerController : MonoBehaviourPunCallbacks
 {
     [SerializeField] Rigidbody _rb = default;
     [SerializeField, Tooltip("通常の移動時に参照される値")] float _moveSpeed = 2f;

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LevelUpSystem : MonoBehaviour
+public class TestLevelUpSystem : MonoBehaviour
 {
     [SerializeField] TextAsset _csv = default;
     [SerializeField, Tooltip("Xが行　Yが列")] Vector2Int _matrix = default;
@@ -61,7 +61,7 @@ public class LevelUpSystem : MonoBehaviour
     }
     private void Start()
     {
-        if (LevelUpManager.PurchaseHistory[_eggNum])
+        if (TestLevelUpManager.PurchaseHistory[_eggNum])
         {
             _buyButton.gameObject.SetActive(false);
             _selectPanel.SetActive(true);
@@ -75,19 +75,19 @@ public class LevelUpSystem : MonoBehaviour
             _priceText.text = "￥" + _price.ToString();
         }
 
-        _currentLevel = LevelUpManager.LevelHistory[_eggNum];
+        _currentLevel = TestLevelUpManager.LevelHistory[_eggNum];
 
         OnUiUpdate();
     }
     public void OnBuyEgg()
     {
-        if(!LevelUpManager.PurchaseHistory[_eggNum])
+        if(!TestLevelUpManager.PurchaseHistory[_eggNum])
         {
-            if(GameManager.Instance.Money >= _price)
+            if(TestGameManager.Instance.Money >= _price)
             {
-                GameManager.Instance.MoneyUpdate(_price);
+                TestGameManager.Instance.MoneyUpdate(_price);
 
-                LevelUpManager.Instance.PurchaseUpdate(_eggNum);
+                TestLevelUpManager.Instance.PurchaseUpdate(_eggNum);
                 _buyButton.gameObject.SetActive(false);
                 _selectPanel.SetActive(true);
                 _releasePanel.SetActive(false);
@@ -97,12 +97,12 @@ public class LevelUpSystem : MonoBehaviour
     public void OnLevelUp()
     {
         //読み込んだCSVの１列レベル行の値が今の所持金よりも多ければ
-        if(GameManager.Instance.Money >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
+        if(TestGameManager.Instance.Money >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
         {
-            GameManager.Instance.MoneyUpdate(_levelTable[_currentLevel, 1]);
+            TestGameManager.Instance.MoneyUpdate(_levelTable[_currentLevel, 1]);
 
             _currentLevel++;
-            LevelUpManager.Instance.LevelUpdate(_eggNum, _currentLevel);
+            TestLevelUpManager.Instance.LevelUpdate(_eggNum, _currentLevel);
 
             OnUiUpdate();
         }
@@ -138,6 +138,6 @@ public class LevelUpSystem : MonoBehaviour
 
     public void SetAvater()
     {
-        Manager.Instance.Avater = _avaterName;
+        TestManager.Instance.Avater = _avaterName;
     }
 }
