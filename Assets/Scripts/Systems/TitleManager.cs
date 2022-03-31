@@ -1,16 +1,26 @@
 using UnityEngine;
 using TMPro;
 using NCMB;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ユーザー情報の登録・取得などをする
 /// </summary>
 public class TitleManager : MonoBehaviour
 {
+    [Header("Login")]
     [SerializeField] TMP_InputField _nameField = default;
     [SerializeField] TMP_InputField _passWordField = default;
-
+    [Header("Signin")]
+    [SerializeField] TMP_InputField _newNameField = default;
+    [SerializeField] TMP_InputField _newPassWordField = default;
+    [Header("Error")]
+    [SerializeField] GameObject _loginErrorPanel = default;
+    [SerializeField] GameObject _siginErrorPanel = default;
+    [Header("Status")]
     [SerializeField] int _startMoney = 100;
+    [SerializeField] string _menuSceneName = "MenuScene";
+
 
     bool isFirst;
 
@@ -21,15 +31,35 @@ public class TitleManager : MonoBehaviour
     /// <summary>
     /// ログイン用の関数
     /// </summary>
-    public void Login()
+    public void OnLogin()
+    {
+        if (!string.IsNullOrEmpty(_nameField.text) && !string.IsNullOrEmpty(_passWordField.text))
+        {
+            Login(_nameField, _passWordField);
+        }
+    }
+
+    /// <summary>
+    /// サインイン用の関数
+    /// </summary>
+    public void OnSignin()
+    {
+        if (!string.IsNullOrEmpty(_newNameField.text) && !string.IsNullOrEmpty(_newPassWordField.text))
+        {
+            Signin();
+        }
+    }
+
+    void Login(TMP_InputField name, TMP_InputField pass)
     {
         var user = new NCMBUser();
 
-        NCMBUser.LogInAsync(_nameField.text, _passWordField.text, (NCMBException e) =>
+        NCMBUser.LogInAsync(name.text, pass.text, (NCMBException e) =>
          {
              if (e != null)
              {
                  Debug.LogError("ログイン失敗 " + e.ErrorMessage);
+                 _loginErrorPanel.SetActive(true);
              }
              else
              {
@@ -41,31 +71,32 @@ public class TitleManager : MonoBehaviour
                  }
 
                  //シーンの遷移
+                 Debug.Log("シーンの遷移が行われました");
+                 SceneLoad.Instance.LoadScene(_menuSceneName);
              }
          });
     }
-    /// <summary>
-    /// サインイン用の関数
-    /// </summary>
-    public void Signin()
+    
+    void Signin()
     {
         var user = new NCMBUser();
 
-        user.UserName = _nameField.text;
-        user.Password = _passWordField.text;
+        user.UserName = _newNameField.text;
+        user.Password = _newPassWordField.text;
 
         user.SignUpAsync((NCMBException e) =>
         {
-            if(e != null)
+            if (e != null)
             {
                 Debug.LogError("新規登録失敗 " + e.ErrorMessage);
+                _siginErrorPanel.SetActive(true);
             }
             else
             {
                 Debug.Log("新規登録成功");
 
                 isFirst = true;
-                Login();
+                Login(_newNameField, _newPassWordField);
             }
         });
     }
@@ -77,9 +108,10 @@ public class TitleManager : MonoBehaviour
     {
         var cu = NCMBUser.CurrentUser;
 
-        var o = new NCMBObject("UserDate");
-        o["Name"] = _nameField.text;
-        o["Money"] = _startMoney;
+        var obj = new NCMBObject("UserDate");
+        obj["Name"] = _newNameField.text;
+        obj["PassWord"] = _newPassWordField.text;
+        obj["Money"] = _startMoney;
 
         string ID;
 
@@ -91,9 +123,9 @@ public class TitleManager : MonoBehaviour
         acl.SetReadAccess(cu.ObjectId, true);
         acl.SetWriteAccess(cu.ObjectId, true);  //自分だけ書き込みが出来るようにする
 
-        o.ACL = acl;
+        obj.ACL = acl;
 
-        o.SaveAsync((NCMBException e) =>
+        obj.SaveAsync((NCMBException e) =>
         {
             if(e != null)
             {
@@ -101,7 +133,7 @@ public class TitleManager : MonoBehaviour
             }
             else
             {
-                ID = o.ObjectId;
+                ID = obj.ObjectId;
                 cu["UserDateID"] = ID;
 
                 cu.SaveAsync((NCMBException ee) =>
