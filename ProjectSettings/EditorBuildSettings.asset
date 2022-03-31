@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Game/SelectEggScene.unity
     guid: 1add1c24dbfe75f4586cece8cc08422c
   - enabled: 1
-    path: Assets/Scenes/Game/InGameScene.unity
+    path: Assets/Scenes/Test/InGameScene.unity
     guid: a3de9f8dfdf2840479f8ce4e9426eefd
+  - enabled: 1
+    path: Assets/Scenes/Game/MenuScene.unity
+    guid: ea6ec94f34b42244aa7da1a4d56d4e70
   m_configObjects: {}
