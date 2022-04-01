@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public partial class PlayerController : MonoBehaviour
 {
     [SerializeField] Rigidbody _rb = default;
     [SerializeField] Animator _anim = default;
@@ -31,9 +31,13 @@ public class PlayerController : MonoBehaviour
     {
         _targetRotation = this.transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
+
+        OnStart();
     }
     private void Update()
     {
+        OnUpdate();
+
         switch(_status)
         {
             case PlayerStatus.IDLE:
