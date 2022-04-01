@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public partial class PlayerController : MonoBehaviour
 {
     [SerializeField] Rigidbody _rb = default;
     [SerializeField] Animator _anim = default;
@@ -31,17 +31,19 @@ public class PlayerController : MonoBehaviour
     {
         _targetRotation = this.transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
+
+        OnStart();
     }
     private void Update()
     {
+        OnUpdate();
+
         switch(_status)
         {
             case PlayerStatus.IDLE:
-                _status = PlayerStatus.MOVE;
                 break;
 
             case PlayerStatus.MOVE:
-                Move();
                 break;
 
             case PlayerStatus.ATTACK:
@@ -53,6 +55,8 @@ public class PlayerController : MonoBehaviour
             case PlayerStatus.DIVEROLL:
                 break;
         }
+
+        Move();
 
         if (Input.GetButtonDown("Fire1") && _status != PlayerStatus.GUARD)
         {
@@ -66,7 +70,7 @@ public class PlayerController : MonoBehaviour
             _barrierObj.SetActive(true);
             _anim.SetBool("Guard", true);
         }
-        else if(Input.GetButtonUp("Fire2") && _status != PlayerStatus.ATTACK)
+        else if(Input.GetButtonUp("Fire2") && _status == PlayerStatus.GUARD)
         {
             _status = PlayerStatus.IDLE;
             _barrierObj.SetActive(false);
@@ -86,12 +90,14 @@ public class PlayerController : MonoBehaviour
 
         if(dir != Vector3.zero)
         {
+            _status = PlayerStatus.MOVE;
+
             dir = Camera.main.transform.TransformDirection(dir);
             dir.y = 0;
 
             var rot = Camera.main.transform.forward;
             rot.y = 0;
-            //Ç±Ç±èCê≥àƒÇçlÇ¶ÇÈ
+
             _targetRotation = Quaternion.LookRotation(rot, Vector3.up);
 
             dir = dir.normalized * _moveSpeed;
@@ -103,6 +109,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            _status = PlayerStatus.IDLE;
+
             _anim.SetFloat("Horizontal", 0, _animDampTime, Time.deltaTime);
             _anim.SetFloat("Vertical", 0, _animDampTime, Time.deltaTime);
         }
@@ -113,7 +121,6 @@ public class PlayerController : MonoBehaviour
     void Attack()
     {
         _anim.SetTrigger("Attack");
-        _rb.velocity = Vector3.zero;
         _rb.AddForce(this.transform.forward * _attackPower, ForceMode.Impulse);
     }
 
