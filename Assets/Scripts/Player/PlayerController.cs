@@ -10,9 +10,23 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float _moveSpeed = 5f;
     [SerializeField] float _rotatePower = 600f;
     [SerializeField] float _animDampTime = 0.2f;
+    [SerializeField] float _attackPower = 3f;
+
+    [SerializeField] GameObject _barrierObj = default;
+
+    [SerializeField] PlayerStatus _status = PlayerStatus.IDLE;
 
     Quaternion _targetRotation;
 
+    enum PlayerStatus
+    {
+        IDLE,
+        MOVE,
+        ATTACK,
+        GUARD,
+        KNOCKBACK,
+        DIVEROLL
+    }
     private void Start()
     {
         _targetRotation = this.transform.rotation;
@@ -20,7 +34,45 @@ public class PlayerController : MonoBehaviour
     }
     private void Update()
     {
-        Move();
+        switch(_status)
+        {
+            case PlayerStatus.IDLE:
+                _status = PlayerStatus.MOVE;
+                break;
+
+            case PlayerStatus.MOVE:
+                Move();
+                break;
+
+            case PlayerStatus.ATTACK:
+                break;
+
+            case PlayerStatus.KNOCKBACK:
+                break;
+
+            case PlayerStatus.DIVEROLL:
+                break;
+        }
+
+        if (Input.GetButtonDown("Fire1") && _status != PlayerStatus.GUARD)
+        {
+            _status = PlayerStatus.ATTACK;
+            Attack();
+        }
+
+        if(Input.GetButtonDown("Fire2") && _status != PlayerStatus.ATTACK)
+        {
+            _status = PlayerStatus.GUARD;
+            _barrierObj.SetActive(true);
+            _anim.SetBool("Guard", true);
+        }
+        else if(Input.GetButtonUp("Fire2") && _status != PlayerStatus.ATTACK)
+        {
+            _status = PlayerStatus.IDLE;
+            _barrierObj.SetActive(false);
+            _anim.SetBool("Guard", false);
+        }
+
     }
 
     void Move()
@@ -37,8 +89,10 @@ public class PlayerController : MonoBehaviour
             dir = Camera.main.transform.TransformDirection(dir);
             dir.y = 0;
 
+            var rot = Camera.main.transform.forward;
+            rot.y = 0;
             //Ç±Ç±èCê≥àƒÇçlÇ¶ÇÈ
-            _targetRotation = Quaternion.LookRotation(Camera.main.transform.forward, Vector3.up);
+            _targetRotation = Quaternion.LookRotation(rot, Vector3.up);
 
             dir = dir.normalized * _moveSpeed;
             dir.y = _rb.velocity.y;
@@ -55,4 +109,17 @@ public class PlayerController : MonoBehaviour
 
         this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation, _targetRotation, rotateSpeed);
     }
+
+    void Attack()
+    {
+        _anim.SetTrigger("Attack");
+        _rb.velocity = Vector3.zero;
+        _rb.AddForce(this.transform.forward * _attackPower, ForceMode.Impulse);
+    }
+
+    public void ResetStatus()
+    {
+        _status = PlayerStatus.IDLE;
+    }
+
 }
