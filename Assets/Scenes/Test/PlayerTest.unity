@@ -643,7 +643,7 @@ Transform:
   m_GameObject: {fileID: 1374354637}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.14, y: -0.97, z: 2.277315}
-  m_LocalScale: {x: 11.371, y: 1, z: 10.294}
+  m_LocalScale: {x: 25.402815, y: 1, z: 24.071487}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -733,9 +733,11 @@ MonoBehaviour:
   _moveSpeed: 3
   _rotatePower: 600
   _animDampTime: 0.2
-  _attackPower: 2
+  _attackPower: 3
+  _divePower: 10
   _barrierObj: {fileID: 36980817}
-  _status: 0
+  _attackInputName: Fire1
+  _diveInputName: Fire2
 --- !u!95 &1774625449
 Animator:
   serializedVersion: 4

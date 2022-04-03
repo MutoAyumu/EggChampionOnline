@@ -6,6 +6,8 @@ public partial class PlayerController
 {
     //各Stateをここに記述する
     static readonly MoveState _moveState = new MoveState(); //readonlyで読み取り専用にしている
+    static readonly AttackState _attackState = new AttackState();
+    static readonly DiveRollState _diveState = new DiveRollState();
 
     PlayerStateBase _currentState = _moveState;
 
