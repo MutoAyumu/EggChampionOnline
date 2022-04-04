@@ -20,6 +20,10 @@ public partial class PlayerController
             {
                 player.ChangeState(_diveState);
             }
+            else if(Input.GetButtonDown(player._guardInputName))
+            {
+                player.ChangeState(_guardState);
+            }
         }
     }
 

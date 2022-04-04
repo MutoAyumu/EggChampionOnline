@@ -21,6 +21,7 @@ public partial class PlayerController : Singleton<PlayerController>
     [Header("KeyBindingsName")]
     [SerializeField] string _attackInputName = "Fire1"; //Œã‚Åâ‘Î‚É•ÏX‚µ‚È‚¢‚à‚Ì‚Á‚Äconst‚Æ‚©‚É‚µ‚½•û‚ª‚¢‚¢H
     [SerializeField] string _diveInputName = "Fire2";
+    [SerializeField] string _guardInputName = "Fire3";
 
     Quaternion _targetRotation;
     Vector3 _dir;

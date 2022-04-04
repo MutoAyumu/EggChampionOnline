@@ -738,6 +738,7 @@ MonoBehaviour:
   _barrierObj: {fileID: 36980817}
   _attackInputName: Fire1
   _diveInputName: Fire2
+  _guardInputName: Fire3
 --- !u!95 &1774625449
 Animator:
   serializedVersion: 4

@@ -8,6 +8,7 @@ public partial class PlayerController
     static readonly MoveState _moveState = new MoveState(); //readonly‚Å“Ç‚İæ‚èê—p‚É‚µ‚Ä‚¢‚é
     static readonly AttackState _attackState = new AttackState();
     static readonly DiveRollState _diveState = new DiveRollState();
+    static readonly GuardState _guardState = new GuardState();
 
     PlayerStateBase _currentState = _moveState;
 
