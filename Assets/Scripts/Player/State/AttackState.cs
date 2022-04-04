@@ -27,7 +27,7 @@ public partial class PlayerController
         _anim.SetTrigger("Attack");
 
         _rb.velocity = Vector3.zero;
-        _rb.AddForce(this.transform.forward * _attackPower, ForceMode.Impulse);
+        _rb.AddForce(this.transform.forward * _attackMovePower, ForceMode.Impulse);
     }
 
 }

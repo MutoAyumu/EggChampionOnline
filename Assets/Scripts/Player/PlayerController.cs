@@ -10,10 +10,17 @@ public partial class PlayerController : Singleton<PlayerController>
 
     [Header("Parameter")]
     [SerializeField] float _moveSpeed = 5f;
+
     [SerializeField] float _rotatePower = 600f;
     [SerializeField] float _animDampTime = 0.2f;
-    [SerializeField] float _attackPower = 3f;
+
+    [SerializeField] float _attackMovePower = 3f;
+    [SerializeField] float _attackPower = 1f;
+
     [SerializeField] float _divePower = 10f;
+
+    [SerializeField] float _maxHp = 10f;
+    float _currentHp;
 
     [Header("Objects")]
     [SerializeField] GameObject _barrierObj = default;
@@ -28,6 +35,8 @@ public partial class PlayerController : Singleton<PlayerController>
 
     private void Start()
     {
+        _currentHp = _maxHp;
+
         _targetRotation = this.transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -36,6 +45,11 @@ public partial class PlayerController : Singleton<PlayerController>
     private void Update()
     {
         OnUpdate();
+
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            TakeDamage(1);
+        }
     }
 
     /// <summary>
