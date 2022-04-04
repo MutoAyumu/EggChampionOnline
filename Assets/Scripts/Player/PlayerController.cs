@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class PlayerController : Singleton<PlayerController>
+public partial class PlayerController : Singleton<PlayerController>, IDamage
 {
     [Header("Component")]
     [SerializeField] Rigidbody _rb = default;
@@ -32,6 +32,7 @@ public partial class PlayerController : Singleton<PlayerController>
 
     Quaternion _targetRotation;
     Vector3 _dir;
+    IDamage _target;
 
     private void Start()
     {
@@ -58,5 +59,14 @@ public partial class PlayerController : Singleton<PlayerController>
     public void ResetState()
     {
         ChangeState(_moveState);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        _target = other.GetComponent<IDamage>();
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        _target = null;
     }
 }

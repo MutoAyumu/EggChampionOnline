@@ -15,20 +15,32 @@ public partial class PlayerController
     /// <param name="damage"></param>
     public void TakeDamage(float damage)
     {
-        ChangeState(_damageState);  //ダメージを受けた時のステートに遷移
-
-        _anim.SetTrigger("GetHit");
-
-        if(_currentHp > 0)
+        if (_currentState != _guardState && _currentState != _diveState)    //ステートが防御と回避じゃなければ
         {
-            _currentHp -= damage;
+            ChangeState(_damageState);  //ダメージを受けた時のステートに遷移
 
-            if(_currentHp <= 0)
+            _rb.velocity = Vector3.zero;
+            _anim.SetTrigger("GetHit");
+
+            if (_currentHp > 0)
             {
-                ChangeState(_deathState);   //死んだ時のステートに遷移
-            }
-        }
+                _currentHp -= damage;
 
-        Debug.Log("攻撃を受けました : 残りのHP " + _currentHp);
+                if (_currentHp <= 0)
+                {
+                    ChangeState(_deathState);   //死んだ時のステートに遷移
+                }
+            }
+
+            Debug.Log("攻撃を受けました : 残りのHP " + _currentHp);
+        }
     }
+}
+
+/// <summary>
+/// ダメージ用のインターフェース
+/// </summary>
+public interface IDamage
+{
+    void TakeDamage(float damage);
 }
