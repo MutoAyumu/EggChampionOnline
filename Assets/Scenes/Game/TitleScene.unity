@@ -6990,7 +6990,7 @@ MonoBehaviour:
   _fadeOut: {fileID: 566514062}
   _fadeIn: {fileID: 992479061}
   _fadeTime: 2
-  isStartFade: 0
+  isStartFade: 1
 --- !u!1 &1608024716
 GameObject:
   m_ObjectHideFlags: 0
