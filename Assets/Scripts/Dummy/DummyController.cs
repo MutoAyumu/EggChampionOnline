@@ -5,8 +5,14 @@ using UnityEngine;
 public class DummyController : MonoBehaviour, IDamage
 {
     [SerializeField] Animator _anim = default;
+    [SerializeField] Rigidbody _rb = default;
+
+    [SerializeField] float _knockBackPower = 2f;
+
     [SerializeField] float _timeLimit = 3f;
     float _timer;
+
+    [SerializeField] int _damageLimit = 5;
 
     bool IsInvincible;  //無敵状態の時のフラグ
 
@@ -35,7 +41,7 @@ public class DummyController : MonoBehaviour, IDamage
                 _count = 0;
             }
 
-            if(_count >= 5)   //とりあえず5回くらい
+            if(_count >= _damageLimit)   //とりあえず5回くらい
             {
                 IsInvincible = true;
                 _timer = 0;
@@ -48,10 +54,12 @@ public class DummyController : MonoBehaviour, IDamage
             IsInvincible = true;
         }
     }
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Transform other)
     {
         if (!IsInvincible)
         {
+            _rb.AddForce((this.transform.position - other.position).normalized * _knockBackPower, ForceMode.Impulse);   //ノックバック処理
+
             _anim.SetTrigger("GetHit");
             _count++;
             _timer = 0;
