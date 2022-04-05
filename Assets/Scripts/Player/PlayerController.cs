@@ -3,44 +3,44 @@ using Cinemachine;
 
 public partial class PlayerController : MonoBehaviour, IDamage
 {
-    [Header("Component")]
+    [Header("Component"), Space(10)]
     [SerializeField] Rigidbody _rb = default;
     [SerializeField] Animator _anim = default;
 
-    [Header("Parameter")]
-    [SerializeField] float _moveSpeed = 5f;
+    [Header("Parameter"), Space(10)]
+    [SerializeField, Tooltip("移動スピード")] float _moveSpeed = 5f;
 
     [SerializeField] float _rotatePower = 600f;
     [SerializeField] float _animDampTime = 0.2f;
 
-    [SerializeField] float _attackMovePower = 3f;
-    [SerializeField] float _attackPower = 1f;
+    [SerializeField, Tooltip("攻撃する時に移動する力")] float _attackMovePower = 3f;
+    [SerializeField, Tooltip("攻撃力")] float _attackPower = 1f;
 
-    [SerializeField] float _knockBackPower = 2f;
+    [SerializeField, Tooltip("ダメージを受けた時に加えられる力")] float _knockBackPower = 2f;
 
-    [SerializeField] float _divePower = 10f;
+    [SerializeField, Tooltip("回避する時の力")] float _divePower = 10f;
 
-    [SerializeField] float _maxHp = 10f;
+    [SerializeField, Tooltip("最大HP")] float _maxHp = 10f;
     float _currentHp;
 
     [SerializeField] float _timeLimit = 5f;
     float _timer;
 
-    [SerializeField] int _damageLimit = 5;
+    [SerializeField, Tooltip("何回攻撃を受けたら無敵になるか")] int _damageLimit = 5;
     int _count;
 
-    [Header("Objects")]
-    [SerializeField] GameObject _barrierObj = default;
+    [Header("Objects"), Space(10)]
+    [SerializeField, Tooltip("防御する時に表示するオブジェクト")] GameObject _barrierObj = default;
 
-    [Header("Camera")]
+    [Header("Camera"), Space(10)]
     [SerializeField] CinemachineVirtualCamera _povCamera = default;
     [SerializeField] CinemachineVirtualCamera _lockOnCamera = default;
 
-    [Header("KeyBindingsName")]
-    [SerializeField] string _attackInputName = "Fire1"; //後で絶対に変更しないものってconstとかにした方がいい？
-    [SerializeField] string _diveInputName = "Fire2";
-    [SerializeField] string _guardInputName = "Fire3";
-    [SerializeField] string _cameraChangeInputName = "CameraChange";
+    [Header("KeyBindingsName"), Space(10)]
+    [SerializeField, Tooltip("攻撃するボタン")] string _attackInputName = "Fire1"; //後で絶対に変更しないものってconstとかにした方がいい？
+    [SerializeField, Tooltip("回避するボタン")] string _diveInputName = "Fire2";
+    [SerializeField, Tooltip("防御するボタン")] string _guardInputName = "Fire3";
+    [SerializeField, Tooltip("カメラを切り替えるボタン")] string _cameraChangeInputName = "CameraChange";
 
     Quaternion _targetRotation;
     Vector3 _dir;

@@ -2575,8 +2575,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1089790302}
-  m_LocalRotation: {x: 0.14591047, y: -0.044895764, z: 0.006628605, w: 0.98825634}
-  m_LocalPosition: {x: 0.4687678, y: 2.5606518, z: -2.3186662}
+  m_LocalRotation: {x: 0.14591046, y: -0.04489574, z: 0.006628601, w: 0.98825634}
+  m_LocalPosition: {x: 0.4687677, y: 2.5606518, z: -2.3186662}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2873,7 +2873,7 @@ GameObject:
   - component: {fileID: 1187381862}
   - component: {fileID: 1187381861}
   m_Layer: 0
-  m_Name: CM vcam1
+  m_Name: POV_Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3311,7 +3311,7 @@ GameObject:
   - component: {fileID: 1285265007}
   - component: {fileID: 1285265006}
   m_Layer: 0
-  m_Name: CM vcam2
+  m_Name: LockOn_Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3362,8 +3362,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285265005}
-  m_LocalRotation: {x: 0.14591047, y: -0.044895764, z: 0.006628605, w: 0.98825634}
-  m_LocalPosition: {x: 0.4687678, y: 2.5606518, z: -2.3186662}
+  m_LocalRotation: {x: 0.14591046, y: -0.04489574, z: 0.006628601, w: 0.98825634}
+  m_LocalPosition: {x: 0.4687677, y: 2.5606518, z: -2.3186662}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
