@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public partial class PlayerController
 {
+    bool IsAttack;
+
     public class AttackState : PlayerStateBase
     {
         public override void OnEnter(PlayerController player, PlayerStateBase state)
         {
-            player.Attack();
+            player.AttackMove();
         }
         public override void OnUpdate(PlayerController player)
         {
-            if (Input.GetButtonDown(player._attackInputName))
+            if (Input.GetButtonDown(player._attackInputName) && !player.IsAttack)
             {
-                player.Attack();
+                player.AttackMove();
             }
         }
     }
@@ -24,10 +24,19 @@ public partial class PlayerController
     /// </summary>
     void Attack()
     {
+        IsAttack = false;
+
+        if (_target != null)
+        {
+            _target.TakeDamage(_attackPower, this.transform);
+        }
+    }
+    void AttackMove()
+    {
         _anim.SetTrigger("Attack");
+        IsAttack = true;
 
         _rb.velocity = Vector3.zero;
-        _rb.AddForce(this.transform.forward * _attackPower, ForceMode.Impulse);
+        _rb.AddForce(this.transform.forward * _attackMovePower, ForceMode.Impulse);
     }
-
 }

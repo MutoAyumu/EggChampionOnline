@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public partial class PlayerController
@@ -8,17 +6,19 @@ public partial class PlayerController
     {
         public override void OnUpdate(PlayerController player)
         {
-            //ˆÚ“®‚Ìˆ—‚ğ‹Lq
             player.Move();
 
-            //UŒ‚‚É‘JˆÚ
-            if (Input.GetButtonDown(player._attackInputName))
+            if (Input.GetButtonDown(player._attackInputName))   //UŒ‚‚É‘JˆÚ
             {
                 player.ChangeState(_attackState); //Ÿ‚ÌState‚ğˆø”‚Éw’è
             }
-            else if(Input.GetButtonDown(player._diveInputName))
+            else if(Input.GetButtonDown(player._diveInputName))   //‰ñ”ğ‚É‘JˆÚ
             {
                 player.ChangeState(_diveState);
+            }
+            else if(Input.GetButtonDown(player._guardInputName))    //–hŒä‚É‘JˆÚ
+            {
+                player.ChangeState(_guardState);
             }
         }
     }
