@@ -113,6 +113,8 @@ public class TitleManager : MonoBehaviour
         obj["PassWord"] = _newPassWordField.text;
         obj["Money"] = _startMoney;
 
+        GameManager.Instance.Obj = obj;
+
         string ID;
 
         var acl = new NCMBACL();    //82行から90行でアクセス権限の制御
