@@ -82,14 +82,16 @@ public class LevelUpSystem : MonoBehaviour
 
     public void LevelUp()
     {
+        GameManager.Instance.LoadMoney();   //サーバーから更新をする
+
         //読み込んだCSVの１列レベル行の値が今の所持金よりも多ければ
-        if (GameManager.Instance.LoadMoney() >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
+        if (GameManager.Instance.Money >= _levelTable[_currentLevel, 0] && _currentLevel != _matrix.x - 1)
         {
             GameManager.Instance.SaveMoney(_levelTable[_currentLevel, 1]);  //所持金の更新
 
             _currentLevel++;    //レベルの更新
 
-            GameManager.Instance.SaveLevelDate(_eggNum, _currentLevel);    //更新したレベルをサーバーにセーブ
+            GameManager.Instance.SaveLevelDate(_eggNum - 1, _currentLevel);    //更新したレベルをサーバーにセーブ
 
             OnUiUpdate();
         }
