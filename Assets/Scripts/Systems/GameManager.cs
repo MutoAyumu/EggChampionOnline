@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    int[] _levels;
+    int _level;
     NCMBObject _obj;
     [SerializeField]int _money;
 
-    public int[] Levels { get => _levels;}
+    public int Level { get => _level;}
     public int Money { get => _money;}
+
+    /* ToDo
+     スペルミス恥ずかしいから修正する
+    Date → Deta
+    
+      データ取得の説明サイト
+    https://blog.mbaas.nifcloud.com/entry/2021/09/17/185329#%E9%85%8D%E5%88%97%E5%9E%8B
+     */
 
     protected override void OnAwake()
     {
@@ -39,8 +47,10 @@ public class GameManager : Singleton<GameManager>
             else
             {
                 Debug.Log("データのロードに成功しました");
-                var s = _obj["Money"].ToString();
-                _money = int.Parse(s);
+                //var s = _obj["Money"].ToString();
+                //_money = int.Parse(s);
+                var m = (long)_obj["Money"];
+                _money = (int)m;
             }
         });
     }
@@ -61,8 +71,10 @@ public class GameManager : Singleton<GameManager>
             {
                 Debug.Log("データのロードに成功しました");
 
-                var s = _obj["Money"].ToString();
-                _money = int.Parse(s);
+                //var s = _obj["Money"].ToString();
+                //_money = int.Parse(s);
+                var m = (long)_obj["Money"];
+                _money = (int)m;
                 _money -= money;
                 _obj["Money"] = _money;
 
@@ -86,11 +98,8 @@ public class GameManager : Singleton<GameManager>
     /// </summary>
     /// <param name="i"></param>
     /// <returns></returns>
-    public int LoadLevelDate(int i)
+    public void LoadLevelDate(int i)
     {
-        var levelDate = (int[])_obj["LevelDate"];
-        var level = levelDate[i];
-
         _obj.FetchAsync((NCMBException e) =>
         {
             if (e != null)
@@ -100,10 +109,11 @@ public class GameManager : Singleton<GameManager>
             else
             {
                 Debug.Log("データのロードに成功しました");
+                var levelDate = (ArrayList)_obj["LevelDate"];
+                var l = (long)levelDate[i];
+                _level = (int)l;
             }
         });
-
-        return level;
     }
 
     /// <summary>
@@ -113,19 +123,31 @@ public class GameManager : Singleton<GameManager>
     /// <param name="value"></param>
     public void SaveLevelDate(int i, int value)
     {
-        var levelDate = (int[])_obj["LevelDate"];
-        levelDate[i] = value;
-        _obj["LevelDate"] = levelDate;
-
-        _obj.SaveAsync((NCMBException e) =>
+        _obj.FetchAsync((NCMBException e) =>
         {
             if(e != null)
             {
-                Debug.LogError("データのセーブに失敗しました");
+                Debug.LogError("データのロードに失敗しました");
             }
             else
             {
-                Debug.Log("データのセーブに成功しました");
+                Debug.Log("データのロードに成功しました");
+
+                var levelDate = (ArrayList)_obj["LevelDate"];
+                levelDate[i] = value;
+                _obj["LevelDate"] = levelDate;
+
+                _obj.SaveAsync((NCMBException e) =>
+                {
+                    if (e != null)
+                    {
+                        Debug.LogError("データのセーブに失敗しました");
+                    }
+                    else
+                    {
+                        Debug.Log("データのセーブに成功しました");
+                    }
+                });
             }
         });
     }

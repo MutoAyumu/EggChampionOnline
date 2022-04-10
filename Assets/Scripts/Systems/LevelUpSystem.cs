@@ -42,7 +42,9 @@ public class LevelUpSystem : MonoBehaviour
     }
     private void Start()
     {
-        if(GameManager.Instance.Levels[_eggNum - 1] > 0)
+        GameManager.Instance.LoadLevelDate(_eggNum - 1);
+
+        if(GameManager.Instance.Level > 0)
         {
             _buyButton.gameObject.SetActive(false);
             _selectPanel.SetActive(true);
