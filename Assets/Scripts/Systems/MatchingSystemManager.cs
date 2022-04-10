@@ -14,6 +14,15 @@ public class MatchingSystemManager : MonoBehaviourPunCallbacks
     [SerializeField] SceneLoad _sceneLoad = default;
     [SerializeField] string _nextSceneName = "InGameScene";
 
+
+    private void Start()
+    {
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.ConnectUsingSettings();
+            Debug.Log("接続しました");
+        }
+    }
     /// <summary>
     /// ネットワークから切断する
     /// </summary>
